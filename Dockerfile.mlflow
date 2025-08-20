@@ -1,0 +1,22 @@
+# Dockerfile.mlflow - Custom MLflow image with SSL fix
+FROM python:3.11-bookworm
+
+# Install MLflow and required dependencies using trusted mirror
+RUN pip install --no-cache-dir \
+    --index-url https://pypi.tuna.tsinghua.edu.cn/simple \
+    --trusted-host pypi.tuna.tsinghua.edu.cn \
+    mlflow==2.9.2 \
+    sqlalchemy \
+    boto3 \
+    psycopg2-binary \
+    pymysql \
+    pyarrow
+
+# Create directory for artifacts
+RUN mkdir -p /mlflow/artifacts
+
+# Expose MLflow UI port
+EXPOSE 5000
+
+# Entrypoint command
+ENTRYPOINT ["mlflow", "server"]
